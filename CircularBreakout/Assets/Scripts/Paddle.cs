@@ -1,10 +1,13 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+/// <summary>
+/// The player controlled-paddle. Bound to a circle that it moves around, following the mouse.
+/// </summary>
 public class Paddle : MonoBehaviour
 {
     [Tooltip("The radius of the invisible circle this paddle is bound to. Measured in world units, so if your camera's orthographic size is 10, make this 10 to fill the screen.")]
-    public float BoundsRadius;
+    public float BoundsRadius = 5;
 
     public void Update()
     {
