@@ -68,8 +68,8 @@ public class Ball : MonoBehaviour
 
     private Vector2 GetSpawnVelocity()
     {
-        //point the ball towards the paddle
-        return Common.GetPointOnCircle(paddle.CurrentAngle, InitialSpeed);
+        //point the ball away from the paddle
+        return Vector2.ClampMagnitude(paddle.transform.position - transform.position, InitialSpeed);
     }
 
     public void OnCollisionExit2D(Collision2D collision)
