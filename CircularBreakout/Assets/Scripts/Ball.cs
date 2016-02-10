@@ -15,9 +15,6 @@ public class Ball : MonoBehaviour
     [Tooltip("The sound to play when the ball goes off-screen.")]
     public AudioClip DeathSound;
 
-    [Tooltip("The sound to play when the ball resets.")]
-    public AudioClip ResetSound;
-
     private Rigidbody2D body;
     private new Collider2D collider;
     private new AudioSource audio;
@@ -57,7 +54,7 @@ public class Ball : MonoBehaviour
         collider.enabled = true;
         body.position = GetSpawnPoint();
         body.velocity = GetSpawnVelocity();
-        PlaySound(ResetSound);
+        PlaySound(BounceSound);
     }
 
     private Vector2 GetSpawnPoint()
@@ -68,8 +65,8 @@ public class Ball : MonoBehaviour
 
     private Vector2 GetSpawnVelocity()
     {
-        //point the ball away from the paddle
-        return Vector2.ClampMagnitude(paddle.transform.position - transform.position, InitialSpeed);
+        //point the ball towards the center of the screen
+        return (-body.position).normalized * InitialSpeed;
     }
 
     public void OnCollisionExit2D(Collision2D collision)
