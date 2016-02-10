@@ -81,10 +81,25 @@ public class Ball : MonoBehaviour
         {
             audio.pitch += 0.1f;
             body.velocity *= 1.1f;
-            Destroy(collision.collider.gameObject);
-
+            collision.collider.enabled = false;
+            StartCoroutine("FadeOutAndDestroy", collision.collider.gameObject);
             //TODO: check if we just destroyed the last block, say you win, load next level, etc
         }
+    }
+
+    IEnumerator FadeOutAndDestroy(GameObject obj)
+    {
+        Renderer r = obj.GetComponent<Renderer>();
+        for(float alpha = 1.0f; alpha >= 0; alpha -= 0.1f)
+        {
+            Color color = r.material.color;
+            color.a = alpha;
+            r.material.color = color;
+            obj.transform.localScale *= 1.125f;
+            yield return new WaitForSeconds(0.01f);
+        }
+
+        Destroy(obj);
     }
 
     private void PlaySound(AudioClip sound)
