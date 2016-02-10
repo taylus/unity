@@ -19,17 +19,29 @@ public class Ball : MonoBehaviour
     public AudioClip ResetSound;
 
     private Rigidbody2D body;
+    private new Collider2D collider;
     private new AudioSource audio;
+    private new SpriteRenderer renderer;
+    private Paddle paddle;
 
     public void Awake()
     {
         body = GetComponent<Rigidbody2D>();
-        if (body == null) throw new MissingComponentException("Expected: Rigidbody2D");
+        if (body == null) throw new MissingComponentException("Expected attached Rigidbody2D");
+
+        collider = GetComponent<Collider2D>();
+        if (collider == null) throw new MissingComponentException("Expected attached Collider2D");
 
         audio = GetComponent<AudioSource>();
-        if (audio == null) throw new MissingComponentException("Expected: AudioSource");
+        if (audio == null) throw new MissingComponentException("Expected attached AudioSource");
 
-        Reset();
+        renderer = GetComponent<SpriteRenderer>();
+        if (renderer == null) throw new MissingComponentException("Expected attached SpriteRenderer");
+
+        paddle = GameObject.FindGameObjectWithTag("Player").GetComponent<Paddle>();
+        if (paddle == null) throw new MissingReferenceException("Expected Paddle tagged with 'Player' in scene.");
+
+        Invoke("Reset", 0.5f);  //give the paddle a sec to get a position
     }
 
     public void OnBecameInvisible()
@@ -41,16 +53,23 @@ public class Ball : MonoBehaviour
 
     private void Reset()
     {
-        //TODO: start the ball at the paddle instead of the origin
-        body.position = Vector2.zero;
-        body.velocity = GetRandomVelocity();
+        renderer.enabled = true;
+        collider.enabled = true;
+        body.position = GetSpawnPoint();
+        body.velocity = GetSpawnVelocity();
         PlaySound(ResetSound);
     }
 
-    private Vector2 GetRandomVelocity()
+    private Vector2 GetSpawnPoint()
     {
-        float angle = Common.GetRandomAngle();
-        return Common.GetPointOnCircle(angle, InitialSpeed);
+        //calculate the point a little closer in from the paddle's position
+        return Common.GetPointOnCircle(paddle.CurrentAngle, paddle.BoundsRadius - renderer.bounds.size.y);
+    }
+
+    private Vector2 GetSpawnVelocity()
+    {
+        //point the ball towards the paddle
+        return Common.GetPointOnCircle(paddle.CurrentAngle, InitialSpeed);
     }
 
     public void OnCollisionExit2D(Collision2D collision)
@@ -66,6 +85,8 @@ public class Ball : MonoBehaviour
             audio.pitch += 0.1f;
             body.velocity *= 1.1f;
             Destroy(collision.collider.gameObject);
+
+            //TODO: check if we just destroyed the last block, say you win, load next level, etc
         }
     }
 
