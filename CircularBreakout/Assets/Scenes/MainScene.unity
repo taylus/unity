@@ -314,7 +314,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 989b92fa3500a604fbcff864a5948e02, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  BlockPrefab: {fileID: 482932, guid: 49debca45a6ac204c8faa9f4ea2fd23a, type: 2}
+  BlockPrefab: {fileID: 177730, guid: 49debca45a6ac204c8faa9f4ea2fd23a, type: 2}
 --- !u!1 &1920049354
 GameObject:
   m_ObjectHideFlags: 0
@@ -391,7 +391,6 @@ MonoBehaviour:
   InitialSpeed: 2.5
   BounceSound: {fileID: 8300000, guid: 66e8d690b16865c47a3c190044b8101c, type: 3}
   DeathSound: {fileID: 8300000, guid: e5e29211a716b954381595801c63ebb4, type: 3}
-  ResetSound: {fileID: 8300000, guid: c9423ec675164c94bba5cc77b5cb0a7f, type: 3}
 --- !u!58 &1920049358
 CircleCollider2D:
   m_ObjectHideFlags: 0

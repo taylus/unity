@@ -18,7 +18,7 @@ public class Circle : MonoBehaviour
     {
         lineRenderer = gameObject.AddComponent<LineRenderer>();
         lineRenderer.material = new Material(Shader.Find("Particles/Additive"));
-        lineRenderer.SetWidth(0.025f, 0.025f);
+        lineRenderer.SetWidth(0.05f, 0.05f);
         lineRenderer.SetVertexCount(Points + 1);    //+1 to close the shape
         Draw();
     }

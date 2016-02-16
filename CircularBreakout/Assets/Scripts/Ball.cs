@@ -20,6 +20,7 @@ public class Ball : MonoBehaviour
     private new AudioSource audio;
     private new SpriteRenderer renderer;
     private Paddle paddle;
+    private LevelLoader levelLoader;
 
     public void Awake()
     {
@@ -38,11 +39,18 @@ public class Ball : MonoBehaviour
         paddle = GameObject.FindGameObjectWithTag("Player").GetComponent<Paddle>();
         if (paddle == null) throw new MissingReferenceException("Expected Paddle tagged with 'Player' in scene.");
 
+        levelLoader = GameObject.FindObjectOfType<LevelLoader>();
+        if (levelLoader == null) throw new MissingReferenceException("Expected object of type LevelLoader in scene.");
+
         Invoke("Reset", 0.5f);  //give the paddle a sec to get a position
     }
 
     public void OnBecameInvisible()
     {
+        //ignore when we purposely make the ball invisible
+        if (!renderer.enabled) return;
+
+        //run this when the ball goes offscreen
         audio.pitch = 1.0f;
         PlaySound(DeathSound);
         Invoke("Reset", 1.5f);
@@ -50,11 +58,19 @@ public class Ball : MonoBehaviour
 
     private void Reset()
     {
+        audio.pitch = 1.0f;
         renderer.enabled = true;
         collider.enabled = true;
-        body.position = GetSpawnPoint();
+        transform.position = GetSpawnPoint();
         body.velocity = GetSpawnVelocity();
         PlaySound(BounceSound);
+    }
+
+    private void Disable()
+    {
+        renderer.enabled = false;
+        collider.enabled = false;
+        body.velocity = Vector2.zero;
     }
 
     private Vector2 GetSpawnPoint()
@@ -77,29 +93,37 @@ public class Ball : MonoBehaviour
         {
             audio.pitch = 1f;
         }
-        else if(collision.collider.CompareTag("Block"))
+        else if (collision.collider.CompareTag("Block"))
         {
             audio.pitch += 0.1f;
             body.velocity *= 1.1f;
             collision.collider.enabled = false;
+
+            //hide the ball immediately when we hit the last block
+            if (levelLoader.BlockCount == 1) Disable();
+
             StartCoroutine("FadeOutAndDestroy", collision.collider.gameObject);
-            //TODO: check if we just destroyed the last block, say you win, load next level, etc
         }
     }
 
-    IEnumerator FadeOutAndDestroy(GameObject obj)
+    private IEnumerator FadeOutAndDestroy(GameObject block)
     {
-        Renderer r = obj.GetComponent<Renderer>();
-        for(float alpha = 1.0f; alpha >= 0; alpha -= 0.1f)
+        Renderer r = block.GetComponent<Renderer>();
+        for (float alpha = 1.0f; alpha >= 0; alpha -= 0.1f)
         {
             Color color = r.material.color;
             color.a = alpha;
             r.material.color = color;
-            obj.transform.localScale *= 1.125f;
+            block.transform.localScale *= 1.125f;
             yield return new WaitForSeconds(0.01f);
         }
 
-        Destroy(obj);
+        levelLoader.DestroyBlock(block);
+        if (levelLoader.GameOver())
+        {
+            //TODO: something exciting because they won
+            Invoke("LoadNextLevel", 1.5f);
+        }
     }
 
     private void PlaySound(AudioClip sound)
@@ -107,5 +131,11 @@ public class Ball : MonoBehaviour
         if (sound == null) return;
         audio.clip = sound;
         audio.Play();
+    }
+
+    private void LoadNextLevel()
+    {
+        levelLoader.Load();
+        Reset();
     }
 }
