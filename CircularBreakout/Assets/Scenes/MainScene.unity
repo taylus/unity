@@ -315,6 +315,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   BlockPrefab: {fileID: 177730, guid: 49debca45a6ac204c8faa9f4ea2fd23a, type: 2}
+  Levels:
+  - {fileID: 2800000, guid: 546e240b70bcfb444921276549629798, type: 3}
+  - {fileID: 2800000, guid: a53eab8d9c1ac7645a7af2d161ece29d, type: 3}
+  - {fileID: 2800000, guid: c7a7ac5e08016ca48be24625e542ed4f, type: 3}
+  - {fileID: 2800000, guid: 063ac856530fafe4eb6045640721ecbc, type: 3}
+  - {fileID: 2800000, guid: ebbfe60b5343cdd4394b4824b2377c90, type: 3}
 --- !u!1 &1920049354
 GameObject:
   m_ObjectHideFlags: 0
@@ -389,6 +395,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   InitialSpeed: 2.5
+  MaxSpeed: 4
   BounceSound: {fileID: 8300000, guid: 66e8d690b16865c47a3c190044b8101c, type: 3}
   DeathSound: {fileID: 8300000, guid: e5e29211a716b954381595801c63ebb4, type: 3}
 --- !u!58 &1920049358

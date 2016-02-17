@@ -7,7 +7,10 @@ using System.Collections;
 public class Ball : MonoBehaviour
 {
     [Tooltip("The initial speed of the ball, measured in world units per second.")]
-    public float InitialSpeed;
+    public float InitialSpeed = 2.5f;
+
+    [Tooltip("The maximum speed of the ball, measured in world units per second.")]
+    public float MaxSpeed = 4.0f;
 
     [Tooltip("The sound to play when the ball bounces.")]
     public AudioClip BounceSound;
@@ -96,7 +99,7 @@ public class Ball : MonoBehaviour
         else if (collision.collider.CompareTag("Block"))
         {
             audio.pitch += 0.1f;
-            body.velocity *= 1.1f;
+            if(body.velocity.magnitude < MaxSpeed) body.velocity *= 1.025f;
             collision.collider.enabled = false;
 
             //hide the ball immediately when we hit the last block
@@ -135,7 +138,7 @@ public class Ball : MonoBehaviour
 
     private void LoadNextLevel()
     {
-        levelLoader.Load();
+        levelLoader.LoadRandom();
         Reset();
     }
 }
