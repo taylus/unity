@@ -1,3 +1,3 @@
 A Breakout clone, but in a circle. Innovative, I know.
 
-<iframe width="420" height="315" src="https://www.youtube.com/embed/U7sfy1i5B-Q" frameborder="0" allowfullscreen></iframe>
+[![Video](https://img.youtube.com/vi/U7sfy1i5B-Q/0.jpg)](https://www.youtube.com/watch?v=U7sfy1i5B-Q)
