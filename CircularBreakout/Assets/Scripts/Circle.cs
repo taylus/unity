@@ -12,13 +12,16 @@ public class Circle : MonoBehaviour
     [Tooltip("The number of vertices in the circle.")]
     public int Points = 100;
 
+    [Tooltip("The color of the circle.")]
+    public Color Color;
+
     private LineRenderer lineRenderer;
 
     public void Awake()
     {
         lineRenderer = gameObject.AddComponent<LineRenderer>();
         lineRenderer.material = new Material(Shader.Find("Sprites/Default"));
-        lineRenderer.material.color = new Color(0.15f, 0.15f, 0.15f, 1);
+        lineRenderer.material.color = Color;
         lineRenderer.SetWidth(0.05f, 0.05f);
         lineRenderer.SetVertexCount(Points + 1);    //+1 to close the shape
         Draw();
