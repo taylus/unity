@@ -17,7 +17,8 @@ public class Circle : MonoBehaviour
     public void Awake()
     {
         lineRenderer = gameObject.AddComponent<LineRenderer>();
-        lineRenderer.material = new Material(Shader.Find("Particles/Additive"));
+        lineRenderer.material = new Material(Shader.Find("Sprites/Default"));
+        lineRenderer.material.color = new Color(0.15f, 0.15f, 0.15f, 1);
         lineRenderer.SetWidth(0.05f, 0.05f);
         lineRenderer.SetVertexCount(Points + 1);    //+1 to close the shape
         Draw();
@@ -30,8 +31,13 @@ public class Circle : MonoBehaviour
         {
             float x = Radius * Mathf.Cos(angle) + transform.position.x;
             float y = Radius * Mathf.Sin(angle) + transform.position.y;
-            lineRenderer.SetPosition(i, new Vector3(x, y, 0));
+            lineRenderer.SetPosition(i, new Vector3(x, y, 0.01f)); //Z is slightly behind the paddle so it draws in front
             angle += (2f * Mathf.PI) / Points;
         }
+    }
+
+    private void OnDestroy()
+    {
+        Destroy(lineRenderer.material);
     }
 }
