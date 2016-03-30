@@ -6,8 +6,14 @@ public class Player : MonoBehaviour
     [Tooltip("Max movement speed in world units/sec.")]
     public float MaxSpeed = 1.0f;
 
+    /// <summary>
+    /// The player's physics body.
+    /// </summary>
     private Rigidbody2D body;
 
+    /// <summary>
+    /// Called when this script is initialized.
+    /// </summary>
     public void Awake()
     {
         body = GetComponent<Rigidbody2D>();
@@ -16,6 +22,9 @@ public class Player : MonoBehaviour
         StartCoroutine("Grow");
     }
 
+    /// <summary>
+    /// Called at a fixed rate (the game's framerate). Handles input.
+    /// </summary>
     public void FixedUpdate()
     {
         float input = Input.GetAxis("Horizontal") * 8;
@@ -23,6 +32,9 @@ public class Player : MonoBehaviour
         body.velocity = Vector2.ClampMagnitude(body.velocity, MaxSpeed);
     }
 
+    /// <summary>
+    /// Makes the player snowball grow larger and heavier at a fixed rate.
+    /// </summary>
     private IEnumerator Grow()
     {
         while (transform.localScale.x <= 1.0f)
