@@ -29,6 +29,7 @@ public class Player : MonoBehaviour
     {
         float input = Input.GetAxis("Horizontal") * 8;
         body.AddForce(new Vector2(input, 0));
+        body.MoveRotation(body.rotation - input);
         body.velocity = Vector2.ClampMagnitude(body.velocity, MaxSpeed);
     }
 
