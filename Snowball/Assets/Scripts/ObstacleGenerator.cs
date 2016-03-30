@@ -34,6 +34,7 @@ public class ObstacleGenerator : MonoBehaviour
             yield return new WaitForSeconds(SpawnInterval);
             if (ObstaclesToSpawn == null || ObstaclesToSpawn.Count == 0) yield break;
             GameObject whatToSpawn = ObstaclesToSpawn[Random.Range(0, ObstaclesToSpawn.Count)];
+            //TODO: reroll spawn location if it overlaps with another obstacle on self or siblings
             var spawned = Instantiate(whatToSpawn, GetRandomSpawnPoint(whatToSpawn), Quaternion.identity) as GameObject;
             spawned.transform.parent = transform;
         }
