@@ -3,6 +3,8 @@ using System.Collections;
 
 public class Roly : MonoBehaviour
 {
+    public GameObject Mouth;
+
     //detect when food enters Roly's collision trigger
     public void OnTriggerEnter2D(Collider2D collider)
     {
@@ -10,7 +12,14 @@ public class Roly : MonoBehaviour
         if(food != null)
         {
             Eat(food);
-            //TODO: animate Roly and play a sound based on whether the food is tasty
+            if (food.IsTasty)
+            {
+                Smile();
+            }
+            else
+            { 
+                Frown();
+            }
         }
     }
 
@@ -25,6 +34,16 @@ public class Roly : MonoBehaviour
     {
         StartCoroutine(Grow(food.Calories * 0.00005f /* metabolic magic number */));
         Destroy(food.gameObject);
+    }
+
+    private void Smile()
+    {
+        Mouth.transform.eulerAngles = Vector3.zero;
+    }
+
+    private void Frown()
+    {
+        Mouth.transform.eulerAngles = Vector3.right * 180f;
     }
 
     //increase Roly's scale by the given amount in the given number of steps over the given duration
