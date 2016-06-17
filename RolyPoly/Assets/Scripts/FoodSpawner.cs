@@ -4,25 +4,37 @@ using System.Collections.Generic;
 
 public class FoodSpawner : MonoBehaviour
 {
+    [Tooltip("Food prefabs to spawn.")]
     public List<Food> Food;
+
+    [Tooltip("How long (in seconds) to wait in between spanwning food.")]
+    public float SpawnDelay;
+
+    [Tooltip("How long (in seconds) to wait before spawning the first food item.")]
+    public float InitialDelay;
+
+    [Tooltip("Point at which food is spawned (world coordinates).")]
+    public Vector2 SpawnPoint;
 
     public void Start()
     {
-        //StartCoroutine(SpawnRandom());
+        StartCoroutine(SpawnRandom());
     }
 
-    public void Update()
+    public void OnDrawGizmos()
     {
-        if(Input.GetMouseButtonDown(0))
-        {
-            if (Food == null || Food.Count < 1) return;
-            Spawn(Food[0], ToWorld(Input.mousePosition));
-        }
+        Gizmos.color = Color.green;
+        Gizmos.DrawCube(SpawnPoint, new Vector3(0.2f, 0.2f, 0.2f));
+    }
 
-        if(Input.GetMouseButtonDown(1))
+    public IEnumerator SpawnRandom()
+    {
+        yield return new WaitForSeconds(InitialDelay);
+        while (true)
         {
-            if (Food == null || Food.Count < 2) return;
-            Spawn(Food[1], ToWorld(Input.mousePosition));
+            Food randomFood = Food[Random.Range(0, Food.Count)];
+            Spawn(randomFood, SpawnPoint);
+            yield return new WaitForSeconds(SpawnDelay);
         }
     }
 
@@ -30,21 +42,5 @@ public class FoodSpawner : MonoBehaviour
     {
         Food spawned = Instantiate(food, position, Quaternion.identity) as Food;
         spawned.transform.parent = transform;
-    }
-
-    public IEnumerator SpawnRandom()
-    {
-        while(true)
-        {
-            Food randomFood = Food[Random.Range(0, Food.Count)];
-            Vector3 randomPosition = new Vector3(Random.Range(0, Screen.width), Screen.height);
-            Spawn(randomFood, ToWorld(randomPosition));
-            yield return new WaitForSeconds(5);
-        }
-    }
-
-    private Vector2 ToWorld(Vector2 position)
-    {
-        return Camera.main.ScreenToWorldPoint(position);
     }
 }

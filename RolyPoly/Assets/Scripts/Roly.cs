@@ -32,7 +32,7 @@ public class Roly : MonoBehaviour
 
     private void Eat(Food food)
     {
-        StartCoroutine(Grow(food.Calories * 0.00005f /* metabolic magic number */));
+        StartCoroutine(Grow(food.Calories * 0.00002f /* metabolic magic number */));
         Destroy(food.gameObject);
     }
 
