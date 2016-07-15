@@ -17,4 +17,20 @@ public class Conveyor : MonoBehaviour
             Direction = -Direction;
         }
     }
+
+    public void Update()
+    {
+        SpinWheels();
+    }
+
+    public void SpinWheels()
+    {
+        foreach(Transform child in transform)
+        {
+            if(child.CompareTag("Wheel"))
+            {
+                child.transform.Rotate(Vector3.back, Direction.x / 2.5f);
+            }
+        }
+    }
 }
