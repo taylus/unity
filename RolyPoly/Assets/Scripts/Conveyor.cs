@@ -6,8 +6,8 @@ public class Conveyor : MonoBehaviour
 
     public void OnCollisionStay2D(Collision2D collision)
     {
-        Rigidbody2D body = collision.gameObject.GetComponent<Rigidbody2D>();
-        body.AddForce(Direction, ForceMode2D.Force);
+        Rigidbody2D body = collision.gameObject.GetComponent<Rigidbody2D>();  
+        body.MovePosition(new Vector2(body.position.x + Direction.x, body.position.y + Direction.y));
     }
 
     public void OnMouseOver()
@@ -29,7 +29,7 @@ public class Conveyor : MonoBehaviour
         {
             if(child.CompareTag("Wheel"))
             {
-                child.transform.Rotate(Vector3.back, Direction.x / 2.5f);
+                child.transform.Rotate(Vector3.back, Direction.x * 100f);
             }
         }
     }

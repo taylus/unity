@@ -30,17 +30,20 @@ public class Roly : MonoBehaviour
         OnTriggerEnter2D(collider);
     }
 
+    //eat the given food
     private void Eat(Food food)
     {
         StartCoroutine(Grow(food.Calories * 0.00002f /* metabolic magic number */));
         Destroy(food.gameObject);
     }
 
+    //make Roly go :)
     private void Smile()
     {
         Mouth.transform.eulerAngles = Vector3.zero;
     }
 
+    //make Roly go :(
     private void Frown()
     {
         Mouth.transform.eulerAngles = Vector3.right * 180f;
