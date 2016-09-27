@@ -9,17 +9,9 @@ public class Roly : MonoBehaviour
     public void OnTriggerEnter2D(Collider2D collider)
     {
         Food food = collider.gameObject.GetComponent<Food>();
-        if(food != null)
+        if (food != null)
         {
             Eat(food);
-            if (food.IsTasty)
-            {
-                Smile();
-            }
-            else
-            { 
-                Frown();
-            }
         }
     }
 
@@ -30,37 +22,37 @@ public class Roly : MonoBehaviour
         OnTriggerEnter2D(collider);
     }
 
-    //eat the given food
-    private void Eat(Food food)
-    {
-        StartCoroutine(Grow(food.Calories * 0.00002f /* metabolic magic number */));
-        Destroy(food.gameObject);
-    }
-
     //make Roly go :)
-    private void Smile()
+    public IEnumerator Smile(float afterSeconds = 0)
     {
+        yield return new WaitForSeconds(afterSeconds);
         Mouth.transform.eulerAngles = Vector3.zero;
     }
 
     //make Roly go :(
-    private void Frown()
+    public IEnumerator Frown(float afterSeconds = 0)
     {
+        yield return new WaitForSeconds(afterSeconds);
         Mouth.transform.eulerAngles = Vector3.right * 180f;
     }
 
-    //increase Roly's scale by the given amount in the given number of steps over the given duration
-    private IEnumerator Grow(float amount, int steps = 8, float duration = 0.15f)
+    //eat the given food
+    private void Eat(Food food)
     {
-        Vector3 scale = new Vector3(amount / steps, amount / steps);
-        for (int i = 0; i < steps; i++)
+        food.SetCollision(false);
+        food.StopMovement();
+        const float eatSpeed = 0.4f;
+        StartCoroutine(this.Scale(transform.localScale.x + (food.Calories * 0.00002f) /* metabolic magic number */, eatSpeed));
+        StartCoroutine(food.MoveTo(Mouth.transform.position, eatSpeed));
+        StartCoroutine(food.Scale(0.5f, eatSpeed));
+        if (food.IsTasty)
         {
-            transform.localScale += scale;
-            if(transform.localScale.x < 0.2f)
-            {
-                transform.localScale = new Vector3(0.2f, 0.2f);
-            }
-            yield return new WaitForSeconds(duration / steps);
+            StartCoroutine(Smile(eatSpeed));
         }
+        else
+        {
+            StartCoroutine(Frown(eatSpeed));
+        }
+        Destroy(food.gameObject, eatSpeed);
     }
 }

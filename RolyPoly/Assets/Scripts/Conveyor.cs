@@ -6,8 +6,8 @@ public class Conveyor : MonoBehaviour
 
     public void OnCollisionStay2D(Collision2D collision)
     {
-        Rigidbody2D body = collision.gameObject.GetComponent<Rigidbody2D>();  
-        body.MovePosition(new Vector2(body.position.x + Direction.x, body.position.y + Direction.y));
+        Food food = collision.gameObject.GetComponent<Food>();
+        food.MoveRelative(Direction);
     }
 
     public void OnMouseOver()

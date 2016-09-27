@@ -12,6 +12,26 @@ public class Food : MonoBehaviour
 
     public void OnBecameInvisible()
     {
-        Destroy(this.gameObject);
+        Destroy(gameObject);
+    }
+
+    public void MoveRelative(Vector2 delta)
+    {
+        Rigidbody2D body = GetComponent<Rigidbody2D>();
+        body.MovePosition(new Vector2(body.position.x + delta.x, body.position.y + delta.y));
+    }
+
+    public void SetCollision(bool enabled)
+    {
+        Collider2D collider = GetComponent<Collider2D>();
+        collider.enabled = enabled;
+        collider.isTrigger = enabled;
+    }
+
+    public void StopMovement()
+    {
+        Rigidbody2D body = GetComponent<Rigidbody2D>();
+        body.velocity = Vector2.zero;
+        body.angularVelocity = 0;
     }
 }
