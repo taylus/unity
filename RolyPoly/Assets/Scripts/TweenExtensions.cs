@@ -3,8 +3,9 @@ using System.Collections;
 
 public static class TweenExtensions
 {
-    public static IEnumerator MoveTo(this MonoBehaviour obj, Vector3 location, float duration)
+    public static IEnumerator MoveTo(this MonoBehaviour obj, Vector3 location, float duration, float afterSeconds = 0)
     {
+        yield return new WaitForSeconds(afterSeconds);
         float elapsedTime = 0;
         Vector3 startingPosition = obj.transform.position;
         while (elapsedTime < duration)
@@ -15,8 +16,9 @@ public static class TweenExtensions
         }
     }
 
-    public static IEnumerator Scale(this MonoBehaviour obj, Vector3 scale, float duration)
+    public static IEnumerator Scale(this MonoBehaviour obj, Vector3 scale, float duration, float afterSeconds = 0)
     {
+        yield return new WaitForSeconds(afterSeconds);
         float elapsedTime = 0;
         Vector3 startingScale = obj.transform.localScale;
         while (elapsedTime < duration)
@@ -27,8 +29,8 @@ public static class TweenExtensions
         }
     }
 
-    public static IEnumerator Scale(this MonoBehaviour obj, float scale, float duration)
+    public static IEnumerator Scale(this MonoBehaviour obj, float scale, float duration, float afterSeconds = 0)
     {
-        return Scale(obj, new Vector3(scale, scale, scale), duration);
+        return Scale(obj, new Vector3(scale, scale, scale), duration, afterSeconds);
     }
 }

@@ -41,18 +41,18 @@ public class Roly : MonoBehaviour
     {
         food.SetCollision(false);
         food.StopMovement();
-        const float eatSpeed = 0.4f;
-        StartCoroutine(this.Scale(transform.localScale.x + (food.Calories * 0.00002f) /* metabolic magic number */, eatSpeed));
-        StartCoroutine(food.MoveTo(Mouth.transform.position, eatSpeed));
-        StartCoroutine(food.Scale(0.5f, eatSpeed));
+        const float eatDuration = 0.4f;
+        StartCoroutine(this.Scale(transform.localScale.x + (food.Calories * 0.00002f) /* metabolic magic number */, eatDuration, eatDuration));
+        StartCoroutine(food.MoveTo(Mouth.transform.position, eatDuration));
+        StartCoroutine(food.Scale(0.5f, eatDuration));
         if (food.IsTasty)
         {
-            StartCoroutine(Smile(eatSpeed));
+            StartCoroutine(Smile(eatDuration));
         }
         else
         {
-            StartCoroutine(Frown(eatSpeed));
+            StartCoroutine(Frown(eatDuration));
         }
-        Destroy(food.gameObject, eatSpeed);
+        Destroy(food.gameObject, eatDuration);
     }
 }
