@@ -5,7 +5,7 @@ public static class TweenExtensions
 {
     public static IEnumerator MoveTo(this MonoBehaviour obj, Vector3 location, float duration, float afterSeconds = 0)
     {
-        yield return new WaitForSeconds(afterSeconds);
+        if (afterSeconds != 0) yield return new WaitForSeconds(afterSeconds);
         float elapsedTime = 0;
         Vector3 startingPosition = obj.transform.position;
         while (elapsedTime < duration)
@@ -18,7 +18,7 @@ public static class TweenExtensions
 
     public static IEnumerator Scale(this MonoBehaviour obj, Vector3 scale, float duration, float afterSeconds = 0)
     {
-        yield return new WaitForSeconds(afterSeconds);
+        if (afterSeconds != 0) yield return new WaitForSeconds(afterSeconds);
         float elapsedTime = 0;
         Vector3 startingScale = obj.transform.localScale;
         while (elapsedTime < duration)
