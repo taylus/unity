@@ -5,6 +5,11 @@ public class Roly : MonoBehaviour
 {
     public GameObject Mouth;
 
+    public void Start()
+    {
+        StartCoroutine(Breathe());
+    }
+
     //detect when food enters Roly's collision trigger
     public void OnTriggerEnter2D(Collider2D collider)
     {
@@ -34,6 +39,17 @@ public class Roly : MonoBehaviour
     {
         yield return new WaitForSeconds(afterSeconds);
         Mouth.transform.eulerAngles = Vector3.right * 180f;
+    }
+
+    //make Roly slowly increase and decrease in size, to look like breathing
+    public IEnumerator Breathe(float breathSize = 0.0002f)
+    {
+        while(true)
+        {
+            float breathAmount = Mathf.Sin(Time.fixedTime) * breathSize;
+            transform.localScale += new Vector3(breathAmount, breathAmount);
+            yield return new WaitForEndOfFrame();
+        }
     }
 
     //eat the given food
