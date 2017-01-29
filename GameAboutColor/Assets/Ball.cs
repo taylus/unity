@@ -7,6 +7,7 @@ using UnityEngine;
 [RequireComponent(typeof(Renderer), typeof(Collider))]
 public class Ball : MonoBehaviour
 {
+    private GameManager gameManager;
     private new Renderer renderer;
     private NamedColor color;
     public NamedColor Color
@@ -25,19 +26,17 @@ public class Ball : MonoBehaviour
     /// </summary>
     public void OnMouseDown()
     {
-        if (color.Name != GameManager.CurrentColor.Name) return;
-        const float duration = 0.2f;
-        StartCoroutine(FadeOut(duration));
-        StartCoroutine(Scale(1.5f, duration));
-        Destroy(gameObject, duration);
+        if (gameManager == null) gameManager = FindObjectOfType<GameManager>();
+        gameManager.BallClicked(this);
     }
 
     /// <summary>
     /// Fades this object out over <paramref name="duration"/> seconds.
     /// </summary>
-    private IEnumerator FadeOut(float duration)
+    public IEnumerator FadeOut(float duration)
     {
         float elapsedTime = 0;
+        if (renderer == null) renderer = GetComponent<Renderer>();
         float startingAlpha = renderer.material.color.a;
         Color color = renderer.material.color;
         while (elapsedTime < duration)
@@ -54,7 +53,7 @@ public class Ball : MonoBehaviour
     /// <summary>
     /// Scales this object's size over <paramref name="duration"/> seconds.
     /// </summary>
-    private IEnumerator Scale(float scale, float duration)
+    public IEnumerator Scale(float scale, float duration)
     {
         float elapsedTime = 0;
         Vector3 startingScale = transform.localScale;

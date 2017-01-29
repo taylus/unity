@@ -1,5 +1,5 @@
-﻿using UnityEngine;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 /// <summary>
 /// A color that keeps track of its own name.
@@ -24,7 +24,13 @@ public struct NamedColor
 
 public static class NamedColors
 {
-    //TODO: have the current level maintain a subset of these, harder levels -> more colors
+    /// <summary>
+    /// All colors used by this game.
+    /// </summary>
+    /// <remarks>
+    /// TODO: have the current level maintain a subset of these.
+    /// Harder levels -> more colors.
+    /// </remarks>
     public static List<NamedColor> Colors = new List<NamedColor>
     {
         new NamedColor("Red", new Color(0.75f, 0, 0)),
@@ -39,8 +45,25 @@ public static class NamedColors
         //new NamedColor("White", new Color(1, 1, 1)),
     };
 
+    /// <summary>
+    /// Returns a random color from <see cref="Colors"/>.
+    /// </summary>
+    /// <returns></returns>
     public static NamedColor GetRandom()
     {
         return Colors[Random.Range(0, Colors.Count)];
+    }
+
+    /// <summary>
+    /// Returns a random color from <see cref="Colors"/> that is not equal to the given color.
+    /// </summary>
+    public static NamedColor GetRandomExcept(NamedColor except)
+    {
+        NamedColor randomColor = GetRandom();
+        while (randomColor.Name == except.Name)
+        {
+            randomColor = GetRandom();
+        }
+        return randomColor;
     }
 }
