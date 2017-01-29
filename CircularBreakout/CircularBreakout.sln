@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2015
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CircularBreakout.CSharp", "CircularBreakout.CSharp.csproj", "{8B862102-E2A8-4691-4E53-334C368445D1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CircularBreakout", "CircularBreakout.csproj", "{64D283DF-8ECF-06C7-CE8D-C0844C6FA2F4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -9,10 +9,10 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{8B862102-E2A8-4691-4E53-334C368445D1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8B862102-E2A8-4691-4E53-334C368445D1}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8B862102-E2A8-4691-4E53-334C368445D1}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8B862102-E2A8-4691-4E53-334C368445D1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{64D283DF-8ECF-06C7-CE8D-C0844C6FA2F4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{64D283DF-8ECF-06C7-CE8D-C0844C6FA2F4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{64D283DF-8ECF-06C7-CE8D-C0844C6FA2F4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{64D283DF-8ECF-06C7-CE8D-C0844C6FA2F4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

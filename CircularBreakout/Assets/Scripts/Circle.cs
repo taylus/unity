@@ -22,8 +22,8 @@ public class Circle : MonoBehaviour
         lineRenderer = gameObject.AddComponent<LineRenderer>();
         lineRenderer.material = new Material(Shader.Find("Sprites/Default"));
         lineRenderer.material.color = Color;
-        lineRenderer.SetWidth(0.05f, 0.05f);
-        lineRenderer.SetVertexCount(Points + 1);    //+1 to close the shape
+        lineRenderer.startWidth = lineRenderer.endWidth = 0.05f;
+        lineRenderer.numPositions = Points + 1;    //+1 to close the shape
         Draw();
     }
 
