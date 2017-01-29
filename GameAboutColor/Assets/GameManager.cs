@@ -51,6 +51,25 @@ public class GameManager : MonoBehaviour
     private int currentCombo;
 
     /// <summary>
+    /// How many seconds remain until the current combo ends.
+    /// </summary>
+    private float untilNextColor;
+
+    /// <summary>
+    /// How long (in seconds) the player has, at maximum, to get combos between clicks.
+    /// </summary>
+    public float ComboTimerMax = 1.75f;
+
+    /// <summary>
+    /// How long (in seconds) the player has, at mimum, to get combos between clicks.
+    /// </summary>
+    /// <remarks>
+    /// Successful combos will make the timer shorter and shorter, but it won't ever
+    /// get shorter than this.
+    /// </remarks>
+    public float ComboTimerMin = 0.75f;
+
+    /// <summary>
     /// The player's current score.
     /// </summary>
     internal int CurrentScore
@@ -81,12 +100,18 @@ public class GameManager : MonoBehaviour
     public BallManager Balls;
 
     /// <summary>
+    /// The UI text element on which to display the game's debug text.
+    /// </summary>
+    public Text DebugText;
+
+    /// <summary>
     /// Called once, when this script is enabled.
     /// </summary>
     public void Start()
     {
         CurrentColor = NamedColors.GetRandom();
         CurrentScore = 0;
+        untilNextColor = ComboTimerMax;
 
         if (Balls == null) Balls = FindObjectOfType<BallManager>();
         Balls.RandomizeBallColors();
@@ -97,7 +122,19 @@ public class GameManager : MonoBehaviour
     /// </summary>
     public void Update()
     {
+        if (DebugText != null)
+        {
+            //TODO: display a sliding bar so the player can see what the timer is at
+            DebugText.text = string.Format("[Combo: {0}] [Next color in: {1:f2} sec]", currentCombo, untilNextColor);
+        }
+
         if (Input.GetKey(KeyCode.Escape)) Quit();
+        if(currentCombo > 0) untilNextColor -= Time.deltaTime;
+        if(untilNextColor < 0)
+        {
+            ResetCombo();
+            ResetColorTimer();
+        }
     }
 
     /// <summary>
@@ -120,6 +157,8 @@ public class GameManager : MonoBehaviour
     /// </summary>
     public void BallClicked(Ball ball)
     {
+        ResetColorTimer();
+
         if (ball.Color.Name == CurrentColor.Name)
         {
             //good input -> fade out and destroy the ball
@@ -132,16 +171,39 @@ public class GameManager : MonoBehaviour
             currentCombo++;
             CurrentScore += currentCombo;
 
+            //decrease color timer, to make longer combos harder to get
+            untilNextColor -= currentCombo * 0.1f;
+
             //TODO: play good sound w/ increasing pitch per combo point
         }
         else
         {
             //bad input -> reset combo, current color, game board
-            currentCombo = 0;
-            CurrentColor = NamedColors.GetRandomExcept(CurrentColor);
-            Balls.ResetDisabledBalls();
+            ResetCombo();
+
+            //decrease score
+            CurrentScore--;
+            if (CurrentScore < 0) CurrentScore = 0;
 
             //TODO: play bad sound
         }
+    }
+
+    /// <summary>
+    /// Resets the "next color in..." timer back to its maximum value.
+    /// </summary>
+    public void ResetColorTimer()
+    {
+        untilNextColor = ComboTimerMax;
+    }
+
+    /// <summary>
+    /// Resets the combo count, target color, and balls in between combos.
+    /// </summary>
+    public void ResetCombo()
+    {
+        currentCombo = 0;
+        CurrentColor = NamedColors.GetRandomExcept(CurrentColor);
+        Balls.ResetDisabledBalls();
     }
 }
