@@ -1,7 +1,10 @@
 ﻿using System.Collections;
 using UnityEngine;
 
-[RequireComponent(typeof(Renderer))]
+/// <summary>
+/// A colored ball that the user clicks at the right time for points.
+/// </summary>
+[RequireComponent(typeof(Renderer), typeof(Collider))]
 public class Ball : MonoBehaviour
 {
     private new Renderer renderer;
@@ -11,18 +14,18 @@ public class Ball : MonoBehaviour
         get { return color; }
         set
         {
+            if (renderer == null) renderer = GetComponent<Renderer>();
             color = value;
             renderer.material.color = value.Color;
         }
     }
 
-    public void Start()
-    {
-        renderer = GetComponent<Renderer>();
-    }
-
+    /// <summary>
+    /// Fires when this object is clicked.
+    /// </summary>
     public void OnMouseDown()
     {
+        if (color.Name != GameManager.CurrentColor.Name) return;
         const float duration = 0.2f;
         StartCoroutine(FadeOut(duration));
         StartCoroutine(Scale(1.5f, duration));

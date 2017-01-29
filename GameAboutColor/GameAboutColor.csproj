@@ -85,7 +85,6 @@
   <ItemGroup>
     <Compile Include="Assets\Ball.cs" />
     <Compile Include="Assets\BallManager.cs" />
-    <Compile Include="Assets\CameraControls.cs" />
     <Compile Include="Assets\GameManager.cs" />
     <Compile Include="Assets\NamedColor.cs" />
   </ItemGroup>
