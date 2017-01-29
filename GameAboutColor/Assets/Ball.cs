@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using UnityEngine;
 
 /// <summary>
@@ -20,12 +21,22 @@ public class Ball : MonoBehaviour
             renderer.material.color = value.Color;
         }
     }
+    private Vector3 initialScale;
+
+    /// <summary>
+    /// Called once, when this script is enabled.
+    /// </summary>
+    public void Start()
+    {
+        initialScale = transform.localScale;
+    }
 
     /// <summary>
     /// Fires when this object is clicked.
     /// </summary>
     public void OnMouseDown()
     {
+        if (!enabled) return;
         if (gameManager == null) gameManager = FindObjectOfType<GameManager>();
         gameManager.BallClicked(this);
     }
@@ -64,5 +75,15 @@ public class Ball : MonoBehaviour
             yield return new WaitForEndOfFrame();
         }
         transform.localScale = startingScale * scale;
+    }
+
+    /// <summary>
+    /// Resets this ball's scale and opacity, and sets it to the given color.
+    /// </summary>
+    public void Reset(NamedColor color)
+    {
+        Color = color;
+        transform.localScale = initialScale;
+        enabled = true;
     }
 }

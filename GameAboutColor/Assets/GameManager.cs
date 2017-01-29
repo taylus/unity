@@ -122,11 +122,11 @@ public class GameManager : MonoBehaviour
     {
         if (ball.Color.Name == CurrentColor.Name)
         {
-            //fade out and destroy the ball
+            //good input -> fade out and destroy the ball
             const float duration = 0.2f;
             StartCoroutine(ball.FadeOut(duration));
             StartCoroutine(ball.Scale(1.5f, duration));
-            Destroy(ball, duration * 10);
+            ball.enabled = false;
 
             //increment score
             currentCombo++;
@@ -136,9 +136,10 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            //reset combo and current color
+            //bad input -> reset combo, current color, game board
             currentCombo = 0;
             CurrentColor = NamedColors.GetRandomExcept(CurrentColor);
+            Balls.ResetDisabledBalls();
 
             //TODO: play bad sound
         }
