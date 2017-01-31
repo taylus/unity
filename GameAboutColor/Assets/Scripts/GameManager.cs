@@ -118,6 +118,21 @@ public class GameManager : MonoBehaviour
     public Text DebugText;
 
     /// <summary>
+    /// The game's sound clip player.
+    /// </summary>
+    private new AudioSource audio;
+
+    /// <summary>
+    /// The sound to play when the player clicks a ball of the correct color.
+    /// </summary>
+    public AudioClip GoodClickSound;
+
+    /// <summary>
+    /// The sound to play when the player clicks a ball of the wrong color.
+    /// </summary>
+    public AudioClip BadClickSound;
+
+    /// <summary>
     /// Called once, when this script is enabled.
     /// </summary>
     public void Start()
@@ -135,6 +150,8 @@ public class GameManager : MonoBehaviour
         CurrentColor = NamedColors.GetRandom();
         CurrentScore = 0;
         untilNextColor = ComboTimerMax;
+
+        audio = GetComponent<AudioSource>();
     }
 
     /// <summary>
@@ -154,6 +171,7 @@ public class GameManager : MonoBehaviour
         {
             ResetCombo();
             ResetColorTimer();
+            audio.PlayOneShot(BadClickSound);
         }
 
         UntilNextColorSlider.value = untilNextColor;
@@ -196,7 +214,8 @@ public class GameManager : MonoBehaviour
             //decrease color timer, to make longer combos harder to get
             untilNextColor -= currentCombo * 0.1f;
 
-            //TODO: play good sound w/ increasing pitch per combo point
+            audio.pitch = 1 + (currentCombo * 0.1f);
+            audio.PlayOneShot(GoodClickSound);
         }
         else
         {
@@ -207,7 +226,8 @@ public class GameManager : MonoBehaviour
             CurrentScore--;
             if (CurrentScore < 0) CurrentScore = 0;
 
-            //TODO: play bad sound
+            audio.pitch = 1;
+            audio.PlayOneShot(BadClickSound);
         }
     }
 
