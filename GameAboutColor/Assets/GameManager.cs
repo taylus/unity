@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Linq;
+using UnityEngine;
 using UnityEngine.UI;
 
 /// <summary>
@@ -29,6 +30,8 @@ public class GameManager : MonoBehaviour
             {
                 CurrentColorText.text = CurrentColor.Name;
                 CurrentColorText.color = CurrentColor.Color;
+                //sliderFillImage.color = CurrentColor.Color;
+                //ScoreText.color = CurrentColor.Color;
             }
         }
     }
@@ -70,6 +73,16 @@ public class GameManager : MonoBehaviour
     public float ComboTimerMin = 0.75f;
 
     /// <summary>
+    /// UI display of how long remains until the current combo ends.
+    /// </summary>
+    public Slider UntilNextColorSlider;
+
+    /// <summary>
+    /// Cache <see cref="UntilNextColorSlider"/>'s fill image for changing its color.
+    /// </summary>
+    private Image sliderFillImage;
+
+    /// <summary>
     /// The player's current score.
     /// </summary>
     internal int CurrentScore
@@ -109,12 +122,19 @@ public class GameManager : MonoBehaviour
     /// </summary>
     public void Start()
     {
+        if (Balls == null) Balls = FindObjectOfType<BallManager>();
+        Balls.RandomizeBallColors();
+
+        if (UntilNextColorSlider != null)
+        {
+            UntilNextColorSlider.minValue = 0;
+            UntilNextColorSlider.maxValue = ComboTimerMax;
+            sliderFillImage = UntilNextColorSlider.GetComponentsInChildren<Image>().FirstOrDefault(c => c.name == "Fill");
+        }
+
         CurrentColor = NamedColors.GetRandom();
         CurrentScore = 0;
         untilNextColor = ComboTimerMax;
-
-        if (Balls == null) Balls = FindObjectOfType<BallManager>();
-        Balls.RandomizeBallColors();
     }
 
     /// <summary>
@@ -135,6 +155,8 @@ public class GameManager : MonoBehaviour
             ResetCombo();
             ResetColorTimer();
         }
+
+        UntilNextColorSlider.value = untilNextColor;
     }
 
     /// <summary>
