@@ -7,11 +7,6 @@ using UnityEngine.UI;
 /// </summary>
 public class GameManager : MonoBehaviour
 {
-    //TODO: make this manage the whole game
-    //pick a current color the player should click
-    //every few seconds, switch it
-    //rack up combos if the player keeps getting the color right
-
     /// <summary>
     /// Backing variable for <see cref="CurrentColor"/>.
     /// </summary>
@@ -161,7 +156,6 @@ public class GameManager : MonoBehaviour
     {
         if (DebugText != null)
         {
-            //TODO: display a sliding bar so the player can see what the timer is at
             DebugText.text = string.Format("[Combo: {0}] [Next color in: {1:f2} sec]", currentCombo, untilNextColor);
         }
 
@@ -171,7 +165,6 @@ public class GameManager : MonoBehaviour
         {
             ResetCombo();
             ResetColorTimer();
-            audio.PlayOneShot(BadClickSound);
         }
 
         UntilNextColorSlider.value = untilNextColor;
@@ -244,6 +237,18 @@ public class GameManager : MonoBehaviour
     /// </summary>
     public void ResetCombo()
     {
+        //award the player for maxing out their combo
+        if(!Balls.ContainsAnyBallsWithColor(CurrentColor))
+        {
+            audio.pitch = 1 + ((currentCombo + 1) * 0.1f);
+            audio.PlayOneShot(GoodClickSound);
+            CurrentScore += currentCombo;
+        }
+        else
+        {
+            audio.PlayOneShot(BadClickSound);
+        }
+
         currentCombo = 0;
         CurrentColor = NamedColors.GetRandomExcept(CurrentColor);
         Balls.ResetDisabledBalls();

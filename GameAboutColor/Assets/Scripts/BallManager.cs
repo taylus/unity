@@ -32,4 +32,20 @@ public class BallManager : MonoBehaviour
             if (!ball.enabled) ball.Reset(NamedColors.GetRandom());
         }
     }
+
+    /// <summary>
+    /// Returns true if there are any balls of the given color attached to this
+    /// script's game object, false otherwise.
+    /// </summary>
+    /// <returns></returns>
+    public bool ContainsAnyBallsWithColor(NamedColor color)
+    {
+        foreach (Transform child in transform)
+        {
+            Ball ball = child.GetComponent<Ball>();
+            if (ball.enabled && ball.Color.Name == color.Name) return true;
+        }
+
+        return false;
+    }
 }
