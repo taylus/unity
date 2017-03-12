@@ -133,7 +133,7 @@ public class GameManager : MonoBehaviour
     public void Start()
     {
         if (Balls == null) Balls = FindObjectOfType<BallManager>();
-        Balls.RandomizeBallColors();
+        Balls.LoadLevel(3, 5, NamedColors.Colors);
 
         if (UntilNextColorSlider != null)
         {
