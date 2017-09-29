@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 
 public class Ship : MonoBehaviour
 {
@@ -6,12 +7,12 @@ public class Ship : MonoBehaviour
     private ParticleSystem smoke;
     private Renderer fire; //the fire sprite to display when thrusting
 
-    public CameraShake shake;
+    public Text Altimeter;
+    public CameraShake Shake;
     public float Thrust;
     public float Handling; //higher number -> faster turns
 
     //TODO: add clouds, birds? need some reference points in the sky
-    //TODO: add altimeter
     //TODO: replacable/upgradable ship parts that affect stats
     //TODO: make gravity weaker as the ship's altitude increases? (making it hard to take off)
 
@@ -48,8 +49,11 @@ public class Ship : MonoBehaviour
 
         //TODO: make this continuous?
         if (transform.position.y <= ShakeCeiling)
-            shake.shakeDuration = vertical;
+            Shake.shakeDuration = vertical;
         else
-            shake.shakeDuration = 0;
+            Shake.shakeDuration = 0;
+
+        Altimeter.text = string.Format("Altitude: {0:f1}m", transform.position.y);
+        Debug.Log(Altimeter.text);
     }
 }
