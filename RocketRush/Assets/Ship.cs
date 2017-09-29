@@ -6,13 +6,14 @@ public class Ship : MonoBehaviour
     private ParticleSystem smoke;
     private Renderer fire; //the fire sprite to display when thrusting
 
+    public CameraShake shake;
     public float Thrust;
     public float Handling; //higher number -> faster turns
 
     //TODO: add clouds, birds? need some reference points in the sky
     //TODO: add altimeter
-    //TODO: screen shake when thrusting
     //TODO: replacable/upgradable ship parts that affect stats
+    //TODO: make gravity weaker as the ship's altitude increases? (making it hard to take off)
 
     //other stats?
     //- top speed
@@ -22,7 +23,9 @@ public class Ship : MonoBehaviour
     //- hull (hp)
     //- shields?
 
-    public void Start()
+    private const float ShakeCeiling = 10f;     //the height at which the screen stops shaking from ship thrust
+
+    private void Start()
     {
         body = GetComponent<Rigidbody2D>();
 
@@ -33,7 +36,7 @@ public class Ship : MonoBehaviour
         if (smoke != null) this.smoke = smoke.GetComponent<ParticleSystem>();
     }
 
-    public void Update()
+    private void Update()
     {
         body.rotation += Input.GetAxis("Horizontal") * -Handling;
 
@@ -42,5 +45,11 @@ public class Ship : MonoBehaviour
 
         if (fire != null) fire.enabled = vertical > 0;
         if (smoke != null) smoke.enableEmission = vertical > 0;
+
+        //TODO: make this continuous?
+        if (transform.position.y <= ShakeCeiling)
+            shake.shakeDuration = vertical;
+        else
+            shake.shakeDuration = 0;
     }
 }
