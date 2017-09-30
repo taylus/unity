@@ -13,8 +13,9 @@ public class Ship : MonoBehaviour
     public float Handling; //higher number -> faster turns
 
     //TODO: add clouds, birds? need some reference points in the sky
+    //TODO: parallax mountains in the background?
     //TODO: replacable/upgradable ship parts that affect stats
-    //TODO: make gravity weaker as the ship's altitude increases? (making it hard to take off)
+    //TODO: make gravity weaker as the ship's altitude increases? (making it harder/more dramatic to take off)
 
     //other stats?
     //- top speed
@@ -45,7 +46,7 @@ public class Ship : MonoBehaviour
         body.AddForce(transform.up * vertical * Thrust);
 
         if (fire != null) fire.enabled = vertical > 0;
-        if (smoke != null) smoke.enableEmission = vertical > 0;
+        if (smoke != null) EnableSmoke(vertical > 0);
 
         //TODO: make this continuous?
         if (transform.position.y <= ShakeCeiling)
@@ -54,6 +55,11 @@ public class Ship : MonoBehaviour
             Shake.shakeDuration = 0;
 
         Altimeter.text = string.Format("Altitude: {0:f1}m", transform.position.y);
-        Debug.Log(Altimeter.text);
+    }
+
+    private void EnableSmoke(bool enabled)
+    {
+        var emission = smoke.emission;
+        emission.enabled = enabled;
     }
 }
