@@ -6,11 +6,15 @@ public class Ship : MonoBehaviour
     private Rigidbody2D body;
     private ParticleSystem smoke;
     private Renderer fire; //the fire sprite to display when thrusting
+    private float currentFuel = 100; //% of fuel remaining
 
     public Text Altimeter;
+    public Text Speedometer;
+    public Text FuelGauge;
     public CameraShake Shake;
     public float Thrust;
     public float Handling; //higher number -> faster turns
+    public float FuelEfficiency; //higher number -> less fuel used per frame of thrust
 
     //TODO: add clouds, birds? need some reference points in the sky
     //TODO: parallax mountains in the background?
@@ -36,30 +40,55 @@ public class Ship : MonoBehaviour
 
         Transform smoke = transform.Find("Smoke");
         if (smoke != null) this.smoke = smoke.GetComponent<ParticleSystem>();
+
+        if (FuelEfficiency <= 0) FuelEfficiency = 1;
     }
 
     private void Update()
     {
-        body.rotation += Input.GetAxis("Horizontal") * -Handling;
+        if (currentFuel > 0)
+        {
+            body.rotation += Input.GetAxis("Horizontal") * -Handling;
+            float vertical = Input.GetAxis("Vertical");
+            body.AddForce(transform.up * vertical * Thrust);
+            if (fire != null) fire.enabled = vertical > 0;
+            if (smoke != null) EnableSmoke(vertical > 0);
+            currentFuel -= vertical / FuelEfficiency;
 
-        float vertical = Input.GetAxis("Vertical");
-        body.AddForce(transform.up * vertical * Thrust);
-
-        if (fire != null) fire.enabled = vertical > 0;
-        if (smoke != null) EnableSmoke(vertical > 0);
-
-        //TODO: make this continuous?
-        if (transform.position.y <= ShakeCeiling)
-            Shake.shakeDuration = vertical;
+            //TODO: make this continuous?
+            if (transform.position.y <= ShakeCeiling)
+                Shake.shakeDuration = vertical;
+            else
+                Shake.shakeDuration = 0;
+        }
         else
+        {
+            if (fire != null) fire.enabled = false;
+            if (smoke != null) EnableSmoke(false);
             Shake.shakeDuration = 0;
+        }
 
-        Altimeter.text = string.Format("Altitude: {0:f1}m", transform.position.y);
+        Altimeter.text = string.Format("Altitude: {0:f1}", transform.position.y);
+        Speedometer.text = string.Format("Speed: {0:f1}", body.velocity.y);
+        UpdateFuelGauge(FuelGauge, currentFuel);
     }
 
     private void EnableSmoke(bool enabled)
     {
         var emission = smoke.emission;
         emission.enabled = enabled;
+    }
+
+    private static void UpdateFuelGauge(Text fuelGaugeText, float fuelPercentage)
+    {
+        var color = GetFuelGaugeColor(fuelPercentage);
+        fuelGaugeText.text = string.Format("Fuel: <color=#{1:X2}{2:X2}{3:X2}>{0:f0}%</color>", fuelPercentage, color.r, color.g, color.b);
+    }
+
+    private static Color32 GetFuelGaugeColor(float fuelPercentage)
+    {
+        if (fuelPercentage < 20) return Color.red;
+        if (fuelPercentage < 50) return Color.yellow;
+        return Color.green;
     }
 }
