@@ -46,6 +46,13 @@ public class Ship : MonoBehaviour
 
     private void Update()
     {
+        Altimeter.text = string.Format("Altitude: {0:f1}", transform.position.y);
+        Speedometer.text = string.Format("Speed: {0:f1}", body.velocity.y);
+        UpdateFuelGauge(FuelGauge, currentFuel);
+    }
+
+    private void FixedUpdate()
+    {
         if (currentFuel > 0)
         {
             body.rotation += Input.GetAxis("Horizontal") * -Handling;
@@ -67,10 +74,6 @@ public class Ship : MonoBehaviour
             if (smoke != null) EnableSmoke(false);
             Shake.shakeDuration = 0;
         }
-
-        Altimeter.text = string.Format("Altitude: {0:f1}", transform.position.y);
-        Speedometer.text = string.Format("Speed: {0:f1}", body.velocity.y);
-        UpdateFuelGauge(FuelGauge, currentFuel);
     }
 
     private void EnableSmoke(bool enabled)
@@ -90,5 +93,11 @@ public class Ship : MonoBehaviour
         if (fuelPercentage < 20) return Color.red;
         if (fuelPercentage < 50) return Color.yellow;
         return Color.green;
+    }
+
+    public void AddFuel(float fuelAmount)
+    {
+        currentFuel += fuelAmount;
+        if (currentFuel > 100) currentFuel = 100;
     }
 }
