@@ -25,6 +25,7 @@ public class GameManager : MonoBehaviour
             {
                 CurrentColorText.text = CurrentColor.Name;
                 CurrentColorText.color = CurrentColor.Color;
+                Camera.main.backgroundColor = Color.Lerp(CurrentColor.Color, Color.white, 0.4f);
                 //sliderFillImage.color = CurrentColor.Color;
                 //ScoreText.color = CurrentColor.Color;
             }

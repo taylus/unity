@@ -32,9 +32,9 @@ public class Ball : MonoBehaviour
     }
 
     /// <summary>
-    /// Fires when this object is clicked.
+    /// Fires when the mouse enter this object or it is tapped.
     /// </summary>
-    public void OnMouseDown()
+    public void OnMouseEnter()
     {
         if (!enabled) return;
         if (gameManager == null) gameManager = FindObjectOfType<GameManager>();
